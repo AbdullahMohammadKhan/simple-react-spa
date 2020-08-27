@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Navbars from "./components/Navbar/Navbars";
+import fakeCourse from "./data/FakeData";
+import Header from "./components/Heading/Heading";
+import Body from "./components/Body/Body";
+import { Container } from "react-bootstrap";
 
 function App() {
+  let [data, setData] = useState([]);
+  let [enrolled, setEnrolled] = useState([]);
+  let [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    fakeCourse().then((fakeCourse) => {
+      setData(fakeCourse);
+    });
+  }, []);
+
+  let handleAddCourse = (price, name) => {
+    setPrice((prev) => prev + price);
+    let newEnrolled = [...enrolled, name];
+    setEnrolled(newEnrolled);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Navbars />
+      <Header />
+      <Body
+        data={data}
+        handleAddCourse={handleAddCourse}
+        price={price}
+        enrolled={enrolled}
+      />
+    </Container>
   );
 }
 
